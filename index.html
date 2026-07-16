@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Our Wedding Book</title>
     <style>
         :root {
@@ -151,7 +151,7 @@
         }
         /* 確保大圖滿版且不會變形 */
         .full-spread-container img {
-            width: 1100px !important; /* 對應書本最大總寬度 */
+            width: 1100px !important; /* 電腦版對應書本最大總寬度 */
             height: 100% !important;
             object-fit: cover;
         }
@@ -243,11 +243,36 @@
         }
         .wish-item-name { color: var(--text-muted); font-weight: 600; font-size: 0.85rem; margin-bottom: 6px;}
 
+        /* 📱 完美手機與平版 RWD 自適應語法 */
         @media (max-width: 768px) {
-            .book-container { height: 480px; }
-            .cover-title h2 { font-size: 1.4rem; }
-            .music-control { top: 15px; right: 15px; padding: 8px 14px; font-size: 0.75rem; }
-            .full-spread-container img { width: 100vw !important; } /* 手機板滿版自適應 */
+            .header-section { padding: 30px 15px 10px 15px; }
+            .header-section h1 { font-size: 1.8rem; }
+            
+            /* 手機版縮小書本高度，防止畫面塞不下 */
+            .book-container { 
+                height: 60vw; /* 依螢幕寬度自動計算黃金比例高度 */
+                min-height: 250px;
+                max-height: 480px; 
+                margin: 10px auto 30px auto;
+            }
+            
+            /* 手機版滿跨頁相片魔法：強制大圖寬度為書本總寬（手機螢幕的 95% 寬度的兩倍） */
+            .full-spread-container img { 
+                width: 190vw !important; 
+            }
+            
+            .cover-title { padding: 20px 25px; }
+            .cover-title h2 { font-size: 1.3rem; }
+            
+            .music-control { 
+                top: 15px; 
+                right: 15px; 
+                padding: 6px 14px; 
+                font-size: 0.75rem; 
+            }
+
+            .guestbook-section { padding: 50px 15px; }
+            .guestbook-container h2 { font-size: 1.3rem; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
@@ -293,10 +318,9 @@
             <div class="page page-left"><img src="https://duk.tw/mC1oG3.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/bBgAaz.jpg"></div>
 
-<!-- 【常規分開的左右頁】 (左08 / 右09) -->
+            <!-- 【常規分開的左右頁】 (左08 / 右09) -->
             <div class="page page-left"><img src="https://duk.tw/kKCYB8.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/Xa64oV.jpg"></div>
-
 
             <!-- 👑 完整一大面（大跨頁照片 1） -->
             <div class="page page-left" data-density="hard">
@@ -314,18 +338,17 @@
                 <div class="full-spread-container"><img src="https://duk.tw/9On7Mg.jpg"></div>
             </div>
 
-<!-- 【常規分開的左右頁】 (左07 / 右11) -->
+            <!-- 【常規分開的左右頁】 (左07 / 右11) -->
             <div class="page page-left"><img src="https://duk.tw/NYo7h4.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/OBWujw.jpg"></div>
 
-<!-- 【常規分開的左右頁】 (左12 / 右13) -->
+            <!-- 【常規分開的左右頁】 (左12 / 右13) -->
             <div class="page page-left"><img src="https://duk.tw/pLHtgY.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/ERneQ6.jpg"></div>
 
-<!-- 【常規分開的左右頁】 (左14 / 右15) -->
+            <!-- 【常規分開的左右頁】 (左14 / 右15) -->
             <div class="page page-left"><img src="https://duk.tw/RhDnxw.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/AMalDh.jpg"></div>
-
 
             <!-- 👑 完整一大面（大跨頁照片 3） -->
             <div class="page page-left" data-density="hard">
@@ -343,11 +366,9 @@
                 <div class="full-spread-container"><img src="https://duk.tw/jDsLEY.jpg"></div>
             </div>
 
-<!-- 【常規分開的左右頁】 (左16 / 右19) -->
+            <!-- 【常規分開的左右頁】 (左16 / 右19) -->
             <div class="page page-left"><img src="https://duk.tw/lVN5dV.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/9hL3Ni.jpg"></div>
-
-
 
             <!-- 👑 完整一大面（大跨頁照片 5） -->
             <div class="page page-left" data-density="hard">
@@ -357,21 +378,16 @@
                 <div class="full-spread-container"><img src="https://duk.tw/BHHyE8.jpg"></div>
             </div>
 
-<!-- 【常規分開的左右頁】 (左21 / 右22) -->
+            <!-- 【常規分開的左右頁】 (左21 / 右22) -->
             <div class="page page-left"><img src="https://duk.tw/x21ptg.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/58onLH.jpg"></div>
 
-<!-- 【常規分開的左右頁】 (左23 / 右24) -->
-            <div class="page page-left"><img src="https://duk.tw/80mFdj.jpg "></div>
+            <!-- 【常規分開的左右頁】 (左23 / 右24) -->
+            <div class="page page-left"><img src="https://duk.tw/80mFdj.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/V3bBoe.jpg"></div>
 
-<!-- 【常規分開的左右頁】 (左25 / 右26) -->
+            <!-- 【常規分開的左右頁】 (左25 / 右26) -->
             <div class="page page-left"><img src="https://duk.tw/bBjS42.jpg"></div>
-            
-
-
-
-          
 
             <!-- 最後一頁：封底 -->
             <div class="page cover-page" data-density="hard">
@@ -391,7 +407,7 @@
             
             <div class="wishes-display" id="wishes-box">
                 <div class="wish-item">
-                    <div class="wish-name">好友</div>
+                    <div class="wish-item-name">好友</div>
                     <div>恭喜你們!要幸福喔！</div>
                 </div>
             </div>
@@ -400,17 +416,21 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', function() {
+            // 偵測是否為手機板，動態調整翻頁效果套件的初始設定值
+            const isMobile = window.innerWidth <= 768;
+
             const pageFlip = new St.PageFlip(document.getElementById("wedding-book"), {
                 width: 550, 
                 height: 700, 
                 size: "stretch",
-                minWidth: 320,
+                minWidth: 280,
                 maxWidth: 550,
-                minHeight: 420,
+                minHeight: 350,
                 maxHeight: 700,
                 maxShadowOpacity: 0.45, 
                 showCover: true, 
-                mobileScrollSupport: false 
+                // 手機版關閉滑動翻頁，改用「點擊」翻頁，防止使用者滑動留言板或滑看照片時誤觸翻頁
+                mobileScrollSupport: !isMobile 
             });
             pageFlip.loadFromHTML(document.querySelectorAll(".page"));
         });
