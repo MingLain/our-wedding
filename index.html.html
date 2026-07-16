@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Wedding Book</title>
+    <style>
+        :root {
+            --bg-color: #FAF7F2; /* 韓式溫柔奶油白 */
+            --book-shadow: rgba(0, 0, 0, 0.12);
+            --text-main: #2C2C2C;
+            --text-muted: #8C8275;
+            --font-serif: 'Noto Serif TC', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* 右上角音樂播放鈕 */
+        .music-control {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(44, 44, 44, 0.15);
+            padding: 10px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .music-control:hover {
+            transform: scale(1.03);
+            background: #fff;
+        }
+        .music-icon {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #D4AF37; 
+            border-radius: 50%;
+        }
+        .breathing {
+            animation: breathe 2s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.4); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        /* 頂部標題區 */
+        .header-section {
+            text-align: center;
+            padding: 50px 20px 15px 20px;
+        }
+        .header-section h1 {
+            font-family: var(--font-serif);
+            font-size: 2.4rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+        .header-section p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 5px;
+        }
+
+        /* 書本容器 */
+        .book-container {
+            width: 95%;
+            max-width: 1100px; 
+            height: 700px;    
+            margin: 20px auto 40px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #wedding-book {
+            box-shadow: 0 20px 45px var(--book-shadow);
+            background: #fff;
+        }
+
+        .page {
+            padding: 0;
+            background-color: #fff;
+            overflow: hidden;
+            height: 100%;
+            position: relative;
+        }
+
+        /* 書溝陰影特效 */
+        .page::after {
+            content: '';
+            position: absolute;
+            top: 0; width: 35px; height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .page-left::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(0,0,0,0.06), rgba(0,0,0,0));
+        }
+        .page-right::after {
+            left: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.06), rgba(0,0,0,0));
+        }
+
+        .page img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ✨ 完整一大面（滿跨頁）專用 CSS 魔法 */
+        .full-spread-container {
+            width: 200% !important; /* 強制寬度變成兩倍大（滿版面） */
+            height: 100%;
+            position: absolute;
+            top: 0;
+            display: flex;
+        }
+        /* 讓左頁顯示圖片的左半部 */
+        .page-left .full-spread-container {
+            left: 0;
+        }
+        /* 讓右頁顯示圖片的右半部 */
+        .page-right .full-spread-container {
+            right: 0;
+            justify-content: flex-end;
+        }
+        /* 確保大圖滿版且不會變形 */
+        .full-spread-container img {
+            width: 1100px !important; /* 對應書本最大總寬度 */
+            height: 100% !important;
+            object-fit: cover;
+        }
+
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #F2ECE4 !important; 
+            border: 1px solid #E5DFD5;
+        }
+        .cover-title {
+            text-align: center;
+            border: 1px solid rgba(44, 44, 44, 0.15);
+            padding: 40px 45px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            width: 85%;
+        }
+        .cover-title h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        .tip-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        /* 留言板區塊 */
+        .guestbook-section {
+            width: 100%;
+            background-color: #F3EFE9;
+            padding: 90px 20px;
+            text-align: center;
+        }
+        .guestbook-container {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+        .guestbook-container h2 {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+        .msg-input, .name-input {
+            width: 100%;
+            padding: 16px;
+            background: #fff;
+            border: 1px solid #E5DFD5;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .msg-input { height: 110px; resize: none; }
+        .submit-btn {
+            background-color: var(--text-main);
+            color: white;
+            padding: 16px 50px;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+        .wishes-display {
+            margin-top: 35px;
+            text-align: left;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+        .wish-item {
+            background: #fff;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.01);
+        }
+        .wish-item-name { color: var(--text-muted); font-weight: 600; font-size: 0.85rem; margin-bottom: 6px;}
+
+        @media (max-width: 768px) {
+            .book-container { height: 480px; }
+            .cover-title h2 { font-size: 1.4rem; }
+            .music-control { top: 15px; right: 15px; padding: 8px 14px; font-size: 0.75rem; }
+            .full-spread-container img { width: 100vw !important; } /* 手機板滿版自適應 */
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+</head>
+<body>
+
+    <!-- 背景音樂播放器 -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="wedding.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- 右上角音樂按鈕 -->
+    <div class="music-control" id="music-btn" onclick="toggleMusic()">
+        <span class="music-icon" id="music-dot"></span>
+        <span id="music-status">播放音樂</span>
+    </div>
+
+    <!-- 頂部標題 -->
+    <div class="header-section">
+        <h1>明澤 & 汝恩</h1>
+        <p>OUR WEDDING ALBUM</p>
+        <div class="tip-text">✦ 點擊邊緣或翻動頁面展開故事 ✦</div>
+    </div>
+
+    <!-- 翻頁書本主體 -->
+    <div class="book-container">
+        <div id="wedding-book">
+            
+            <!-- 第一頁：封面（硬頁，強制由右邊開始） -->
+            <div class="page cover-page" data-density="hard">
+                <div class="cover-title">
+                    <h2>明澤 & 汝恩</h2>
+                    <p style="font-size:0.75rem; letter-spacing:3px; color:var(--text-muted); margin-top:5px;">WEDDING CHAPTERS</p>
+                </div>
+            </div>
+
+            <!-- 【常規分開的左右頁】 (左01 / 右02) -->
+            <div class="page page-left"><img src="https://duk.tw/Bqoszv.jpg"></div>
+            <div class="page page-right"><img src="https://duk.tw/QdSFsH.jpg"></div>
+
+            <!-- 【常規分開的左右頁】 (左03 / 右04) -->
+            <div class="page page-left"><img src="https://duk.tw/mC1oG3.jpg"></div>
+            <div class="page page-right"><img src="https://duk.tw/bBgAaz.jpg"></div>
+
+<!-- 【常規分開的左右頁】 (左08 / 右09) -->
+            <div class="page page-left"><img src="https://duk.tw/kKCYB8.jpg"></div>
+            <div class="page page-right"><img src="https://duk.tw/Xa64oV.jpg"></div>
+
+
+            <!-- 👑 完整一大面（大跨頁照片 1） -->
+            <div class="page page-left" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/G5VERX.jpg"></div>
+            </div>
+            <div class="page page-right" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/G5VERX.jpg"></div>
+            </div>
+
+            <!-- 👑 完整一大面（大跨頁照片 2） -->
+            <div class="page page-left" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/9On7Mg.jpg"></div>
+            </div>
+            <div class="page page-right" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/9On7Mg.jpg"></div>
+            </div>
+
+<!-- 【常規分開的左右頁】 (左07 / 右11) -->
+            <div class="page page-left"><img src="https://duk.tw/NYo7h4.jpg"></div>
+            <div class="page page-right"><img src="https://duk.tw/OBWujw.jpg"></div>
+
+<!-- 【常規分開的左右頁】 (左12 / 右13) -->
+            <div class="page page-left"><img src="https://duk.tw/pLHtgY.jpg"></div>
+            <div class="page page-right"><img src="https://duk.tw/ERneQ6.jpg"></div>
+
+<!-- 【常規分開的左右頁】 (左14 / 右15) -->
+            <div class="page page-left"><img src="https://duk.tw/RhDnxw.jpg"></div>
+            <div class="page page-right"><img src="https://duk.tw/AMalDh.jpg"></div>
+
+
+            <!-- 👑 完整一大面（大跨頁照片 3） -->
+            <div class="page page-left" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/ILt1Jq.jpg"></div>
+            </div>
+            <div class="page page-right" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/ILt1Jq.jpg"></div>
+            </div>
+
+            <!-- 👑 完整一大面（大跨頁照片 4） -->
+            <div class="page page-left" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/jDsLEY.jpg"></div>
+            </div>
+            <div class="page page-right" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/jDsLEY.jpg"></div>
+            </div>
+
+<!-- 【常規分開的左右頁】 (左16 / 右19) -->
+            <div class="page page-left"><img src="https://duk.tw/lVN5dV.jpg"></div>
+            <div class="page page-right"><img src="https://duk.tw/9hL3Ni.jpg"></div>
+
+
+
+            <!-- 👑 完整一大面（大跨頁照片 5） -->
+            <div class="page page-left" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/BHHyE8.jpg"></div>
+            </div>
+            <div class="page page-right" data-density="hard">
+                <div class="full-spread-container"><img src="https://duk.tw/BHHyE8.jpg"></div>
+            </div>
+
+<!-- 【常規分開的左右頁】 (左21 / 右22) -->
+            <div class="page page-left"><img src="https://duk.tw/x21ptg.jpg"></div>
+            <div class="page page-right"><img src="https://duk.tw/58onLH.jpg"></div>
+
+<!-- 【常規分開的左右頁】 (左23 / 右24) -->
+            <div class="page page-left"><img src="https://duk.tw/80mFdj.jpg "></div>
+            <div class="page page-right"><img src="https://duk.tw/V3bBoe.jpg"></div>
+
+<!-- 【常規分開的左右頁】 (左25 / 右26) -->
+            <div class="page page-left"><img src="https://duk.tw/bBjS42.jpg"></div>
+            
+
+
+
+          
+
+            <!-- 最後一頁：封底 -->
+            <div class="page cover-page" data-density="hard">
+                <img src="https://duk.tw/JCxPcu.jpg">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 留言板 -->
+    <div class="guestbook-section">
+        <div class="guestbook-container">
+            <h2>WISHES FROM GUESTS</h2>
+            <input type="text" class="name-input" id="guest-name" placeholder="您的姓名 / Name">
+            <textarea class="msg-input" id="guest-msg" placeholder="留下您對我們的祝福... / Warm Wishes"></textarea>
+            <button class="submit-btn" onclick="addWish()">送出祝福</button>
+            
+            <div class="wishes-display" id="wishes-box">
+                <div class="wish-item">
+                    <div class="wish-name">好友</div>
+                    <div>恭喜你們!要幸福喔！</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            const pageFlip = new St.PageFlip(document.getElementById("wedding-book"), {
+                width: 550, 
+                height: 700, 
+                size: "stretch",
+                minWidth: 320,
+                maxWidth: 550,
+                minHeight: 420,
+                maxHeight: 700,
+                maxShadowOpacity: 0.45, 
+                showCover: true, 
+                mobileScrollSupport: false 
+            });
+            pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+        });
+
+        const music = document.getElementById('bg-music');
+        const musicStatus = document.getElementById('music-status');
+        const musicDot = document.getElementById('music-dot');
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play().then(() => {
+                    musicStatus.innerText = "暫停音樂";
+                    musicDot.classList.add('breathing');
+                }).catch(err => {
+                    console.log("播放被瀏覽器阻擋:", err);
+                });
+            } else {
+                music.pause();
+                musicStatus.innerText = "播放音樂";
+                musicDot.classList.remove('breathing');
+            }
+        }
+
+        function addWish() {
+            const nameInput = document.getElementById('guest-name');
+            const msgInput = document.getElementById('guest-msg');
+            const wishesBox = document.getElementById('wishes-box');
+
+            if(nameInput.value.trim() === '' || msgInput.value.trim() === '') {
+                alert('請填寫名字與祝福話語喔！');
+                return;
+            }
+
+            const wishItem = document.createElement('div');
+            wishItem.className = 'wish-item';
+            wishItem.innerHTML = `
+                <div class="wish-item-name">${nameInput.value}</div>
+                <div>${msgInput.value}</div>
+            `;
+            wishesBox.insertBefore(wishItem, wishesBox.firstChild);
+            nameInput.value = ''; msgInput.value = '';
+        }
+    </script>
+</body>
+</html>
