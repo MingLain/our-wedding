@@ -2,12 +2,12 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <!-- ✨ 修改點 1：解除縮放限制，允許使用者兩指放大縮小 (user-scalable=yes) -->
+    <!-- 啟用手機自由縮放，並防止被套件鎖死 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Our Wedding Book</title>
     <style>
         :root {
-            --bg-color: #FAF7F2; /* 韓式溫柔奶油白 */
+            --bg-color: #FAF7F2; 
             --book-shadow: rgba(0, 0, 0, 0.12);
             --text-main: #2C2C2C;
             --text-muted: #8C8275;
@@ -46,10 +46,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
-        }
-        .music-control:hover {
-            transform: scale(1.03);
-            background: #fff;
         }
         .music-icon {
             display: inline-block;
@@ -134,7 +130,7 @@
             display: block;
         }
 
-        /* 完整一大面（滿跨頁）專用 CSS 魔法 */
+        /* 電腦版跨頁大圖設定 */
         .full-spread-container {
             width: 200% !important; 
             height: 100%;
@@ -142,13 +138,8 @@
             top: 0;
             display: flex;
         }
-        .page-left .full-spread-container {
-            left: 0;
-        }
-        .page-right .full-spread-container {
-            right: 0;
-            justify-content: flex-end;
-        }
+        .page-left .full-spread-container { left: 0; }
+        .page-right .full-spread-container { right: 0; justify-content: flex-end; }
         .full-spread-container img {
             width: 1100px !important; 
             height: 100% !important;
@@ -242,42 +233,47 @@
         }
         .wish-item-name { color: var(--text-muted); font-weight: 600; font-size: 0.85rem; margin-bottom: 6px;}
 
-        /* 📱 完美手機與平版 RWD 自適應語法 */
+        /* 📱 RWD 修正核心 */
         @media (max-width: 768px) {
             .header-section { padding: 30px 15px 10px 15px; }
             .header-section h1 { font-size: 1.8rem; }
             
             .book-container { 
-                height: 60vw; 
-                min-height: 250px;
+                height: 75vw; /* 稍微拉高手機版書本高度，讓縮小的橫幅圖更顯眼 */
+                min-height: 280px;
                 max-height: 480px; 
                 margin: 10px auto 30px auto;
             }
             
-            /* ✨ 修改點 2：當手機是「直立模式」時的優化 */
+            /* 🔥 【核心修正】當手機是「直立模式」時 */
             @media (orientation: portrait) {
-                /* 讓跨頁照片在直屏時自動回歸正常大小，不硬撐成 2 倍寬度，這樣就不會被切掉一半了！ */
-                .full-spread-container {
+                /* 強制大圖容器回歸成單頁 100% 寬度，並且不要用 absolute 亂跑 */
+                .page-left .full-spread-container,
+                .page-right .full-spread-container {
                     width: 100% !important;
-                    position: relative;
+                    height: 100% !important;
+                    position: relative !important;
                     left: 0 !important;
                     right: 0 !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    background: #fff; /* 補滿上下留白處的背景色 */
                 }
+                
+                /* 讓原本橫向的大圖「完整縮小收納」在單一頁面中，不會被斷頭或裁切！ */
                 .full-spread-container img { 
                     width: 100% !important;
-                    object-fit: contain; /* 確保完整圖片縮小顯示在單面中，不會被裁切 */
+                    height: auto !important;
+                    max-height: 100% !important;
+                    object-fit: contain !important; /* 精準縮放核心 */
                 }
             }
 
-            /* ✨ 修改點 3：當使用者把手機「轉橫」時，依然維持原本霸氣的滿版大跨頁 */
+            /* 當手機拿成「橫向模式」時，維持左右對開的震撼大滿版 */
             @media (orientation: landscape) {
-                .full-spread-container {
-                    width: 200% !important;
-                }
-                .full-spread-container img { 
-                    width: 190vw !important; 
-                    object-fit: cover;
-                }
+                .full-spread-container { width: 200% !important; }
+                .full-spread-container img { width: 190vw !important; object-fit: cover; }
             }
             
             .cover-title { padding: 20px 25px; }
