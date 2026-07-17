@@ -2,7 +2,8 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- ✨ 修改點 1：解除縮放限制，允許使用者兩指放大縮小 (user-scalable=yes) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Our Wedding Book</title>
     <style>
         :root {
@@ -133,26 +134,23 @@
             display: block;
         }
 
-        /* ✨ 完整一大面（滿跨頁）專用 CSS 魔法 */
+        /* 完整一大面（滿跨頁）專用 CSS 魔法 */
         .full-spread-container {
-            width: 200% !important; /* 強制寬度變成兩倍大（滿版面） */
+            width: 200% !important; 
             height: 100%;
             position: absolute;
             top: 0;
             display: flex;
         }
-        /* 讓左頁顯示圖片的左半部 */
         .page-left .full-spread-container {
             left: 0;
         }
-        /* 讓右頁顯示圖片的右半部 */
         .page-right .full-spread-container {
             right: 0;
             justify-content: flex-end;
         }
-        /* 確保大圖滿版且不會變形 */
         .full-spread-container img {
-            width: 1100px !important; /* 電腦版對應書本最大總寬度 */
+            width: 1100px !important; 
             height: 100% !important;
             object-fit: cover;
         }
@@ -249,17 +247,37 @@
             .header-section { padding: 30px 15px 10px 15px; }
             .header-section h1 { font-size: 1.8rem; }
             
-            /* 手機版縮小書本高度，防止畫面塞不下 */
             .book-container { 
-                height: 60vw; /* 依螢幕寬度自動計算黃金比例高度 */
+                height: 60vw; 
                 min-height: 250px;
                 max-height: 480px; 
                 margin: 10px auto 30px auto;
             }
             
-            /* 手機版滿跨頁相片魔法：強制大圖寬度為書本總寬（手機螢幕的 95% 寬度的兩倍） */
-            .full-spread-container img { 
-                width: 190vw !important; 
+            /* ✨ 修改點 2：當手機是「直立模式」時的優化 */
+            @media (orientation: portrait) {
+                /* 讓跨頁照片在直屏時自動回歸正常大小，不硬撐成 2 倍寬度，這樣就不會被切掉一半了！ */
+                .full-spread-container {
+                    width: 100% !important;
+                    position: relative;
+                    left: 0 !important;
+                    right: 0 !important;
+                }
+                .full-spread-container img { 
+                    width: 100% !important;
+                    object-fit: contain; /* 確保完整圖片縮小顯示在單面中，不會被裁切 */
+                }
+            }
+
+            /* ✨ 修改點 3：當使用者把手機「轉橫」時，依然維持原本霸氣的滿版大跨頁 */
+            @media (orientation: landscape) {
+                .full-spread-container {
+                    width: 200% !important;
+                }
+                .full-spread-container img { 
+                    width: 190vw !important; 
+                    object-fit: cover;
+                }
             }
             
             .cover-title { padding: 20px 25px; }
@@ -303,7 +321,7 @@
     <div class="book-container">
         <div id="wedding-book">
             
-            <!-- 第一頁：封面（硬頁，強制由右邊開始） -->
+            <!-- 第一頁：封面 -->
             <div class="page cover-page" data-density="hard">
                 <div class="cover-title">
                     <h2>明澤 & 汝恩</h2>
@@ -311,15 +329,15 @@
                 </div>
             </div>
 
-            <!-- 【常規分開的左右頁】 (左01  右02) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/Bqoszv.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/QdSFsH.jpg"></div>
 
-            <!-- 【常規分開的左右頁】 (左03  右04) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/mC1oG3.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/bBgAaz.jpg"></div>
 
-            <!-- 👑 完整一大面（大跨頁照片 1） -->
+            <!-- 大跨頁照片 1 -->
             <div class="page page-left" data-density="hard">
                 <div class="full-spread-container"><img src="https://duk.tw/uWxvyK.jpg"></div>
             </div>
@@ -327,11 +345,11 @@
                 <div class="full-spread-container"><img src="https://duk.tw/uWxvyK.jpg"></div>
             </div>
 
-            <!-- 【常規分開的左右頁】 (左08  右09) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/kKCYB8.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/Xa64oV.jpg"></div>
 
-            <!-- 👑 完整一大面（大跨頁照片 2） -->
+            <!-- 大跨頁照片 2 -->
             <div class="page page-left" data-density="hard">
                 <div class="full-spread-container"><img src="https://duk.tw/G5VERX.jpg"></div>
             </div>
@@ -339,7 +357,7 @@
                 <div class="full-spread-container"><img src="https://duk.tw/G5VERX.jpg"></div>
             </div>
 
-            <!-- 👑 完整一大面（大跨頁照片 3） -->
+            <!-- 大跨頁照片 3 -->
             <div class="page page-left" data-density="hard">
                 <div class="full-spread-container"><img src="https://duk.tw/9On7Mg.jpg"></div>
             </div>
@@ -347,19 +365,19 @@
                 <div class="full-spread-container"><img src="https://duk.tw/9On7Mg.jpg"></div>
             </div>
 
-            <!-- 【常規分開的左右頁】 (左07  右11) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/NYo7h4.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/OBWujw.jpg"></div>
 
-            <!-- 【常規分開的左右頁】 (左12  右13) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/pLHtgY.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/ERneQ6.jpg"></div>
 
-            <!-- 【常規分開的左右頁】 (左14  右15) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/RhDnxw.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/AMalDh.jpg"></div>
 
-            <!-- 👑 完整一大面（大跨頁照片 4） -->
+            <!-- 大跨頁照片 4 -->
             <div class="page page-left" data-density="hard">
                 <div class="full-spread-container"><img src="https://duk.tw/ILt1Jq.jpg"></div>
             </div>
@@ -367,7 +385,7 @@
                 <div class="full-spread-container"><img src="https://duk.tw/ILt1Jq.jpg"></div>
             </div>
 
-            <!-- 👑 完整一大面（大跨頁照片 5） -->
+            <!-- 大跨頁照片 5 -->
             <div class="page page-left" data-density="hard">
                 <div class="full-spread-container"><img src="https://duk.tw/jDsLEY.jpg"></div>
             </div>
@@ -375,11 +393,11 @@
                 <div class="full-spread-container"><img src="https://duk.tw/jDsLEY.jpg"></div>
             </div>
 
-            <!-- 【常規分開的左右頁】 (左16  右19) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/lVN5dV.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/9hL3Ni.jpg"></div>
 
-            <!-- 👑 完整一大面（大跨頁照片 6） -->
+            <!-- 大跨頁照片 6 -->
             <div class="page page-left" data-density="hard">
                 <div class="full-spread-container"><img src="https://duk.tw/BHHyE8.jpg"></div>
             </div>
@@ -387,15 +405,15 @@
                 <div class="full-spread-container"><img src="https://duk.tw/BHHyE8.jpg"></div>
             </div>
 
-            <!-- 【常規分開的左右頁】 (左21  右22) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/x21ptg.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/58onLH.jpg"></div>
 
-            <!-- 【常規分開的左右頁】 (左23  右24) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/80mFdj.jpg"></div>
             <div class="page page-right"><img src="https://duk.tw/V3bBoe.jpg"></div>
 
-            <!-- 【常規分開的左右頁】 (左25  右26) -->
+            <!-- 左右頁 -->
             <div class="page page-left"><img src="https://duk.tw/bBjS42.jpg"></div>
 
             <!-- 最後一頁：封底 -->
@@ -425,7 +443,6 @@
 
     <script>
         window.addEventListener('DOMContentLoaded', function() {
-            // 偵測是否為手機板，動態調整翻頁效果套件的初始設定值
             const isMobile = window.innerWidth <= 768;
 
             const pageFlip = new St.PageFlip(document.getElementById('wedding-book'), {
@@ -438,7 +455,6 @@
                 maxHeight: 700,
                 maxShadowOpacity: 0.45, 
                 showCover: true, 
-                // 手機版關閉滑動翻頁，改用「點擊」翻頁，防止使用者滑動留言板或滑看照片時誤觸翻頁
                 mobileScrollSupport: !isMobile 
             });
             pageFlip.loadFromHTML(document.querySelectorAll('.page'));
